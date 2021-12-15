@@ -5,7 +5,7 @@ import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
-  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+  const totalAmount = `$${cartCtx.totalAmount}`;
   const hasItems = cartCtx.items.length > 0;
 
   const cartItemRemoveHandler = (id) => {
@@ -28,6 +28,7 @@ const Cart = (props) => {
       ))}
     </ul>
   );
+
   return (
     <Modal onClick={props.onClose}>
       {cartItems}
