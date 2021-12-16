@@ -12,19 +12,17 @@ const AvailableMeals = () => {
         mode: "cors",
       });
       const responseData = await response.json();
-      console.log(responseData);
 
       const loadedMeals = [];
 
       for (const key in responseData) {
         loadedMeals.push({
-          id: key,
+          id: responseData[key].Id,
           name: responseData[key].Name,
           description: responseData[key].Description,
           price: responseData[key].Price,
         });
       }
-      console.log(loadedMeals);
       setMeals(loadedMeals);
     };
 

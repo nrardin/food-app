@@ -2,18 +2,29 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//Define product type
+//Define Meal type
 type Meal struct {
 	Id          int
 	Name        string
 	Description string
 	Price       string
+}
+
+type Order struct {
+	MealID int    `json:"id"`
+	Name   string `json:"name"`
+	Amount int    `json:"amount"`
+	Price  string `json:"price"`
 }
 
 func main() {
@@ -64,6 +75,23 @@ func requestHandler(db *sql.DB) {
 
 		//Map structs into response for front-end
 		c.JSON(200, mealList)
+
+	})
+	router.POST("/place-order", func(c *gin.Context) {
+		fmt.Println("order placed")
+
+		// var order Order
+		jsonString, err := ioutil.ReadAll(c.Request.Body)
+		// if err != nil {
+		// 	fmt.Println("Error reading JSON string")
+		// }
+		var order []Order
+		err = json.Unmarshal([]byte(jsonString), &order)
+		if err != nil {
+			log.Print(err)
+		}
+		fmt.Printf("order: %+v\n", order)
+		// json.Unmarshal([]byte(jsonString), &order)
 
 	})
 	router.Run(":3000")

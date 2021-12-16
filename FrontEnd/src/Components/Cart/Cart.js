@@ -3,6 +3,8 @@ import CartContext from "../../store/cart-context";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
+import axios from "axios";
+
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount}`;
@@ -29,6 +31,13 @@ const Cart = (props) => {
     </ul>
   );
 
+  const placeOrder = () => {
+    //Send order to backend
+    const orderJSON = JSON.stringify(cartCtx.items);
+    axios.post("http://localhost:3000/place-order", orderJSON);
+    console.log(orderJSON);
+  };
+
   return (
     <Modal onClick={props.onClose}>
       {cartItems}
@@ -40,7 +49,11 @@ const Cart = (props) => {
         <button className={classes["button--alt"]} onClick={props.onClose}>
           Close
         </button>
-        {hasItems && <button className={classes.button}>Order</button>}
+        {hasItems && (
+          <button className={classes.button} onClick={placeOrder}>
+            Order
+          </button>
+        )}
       </div>
     </Modal>
   );
